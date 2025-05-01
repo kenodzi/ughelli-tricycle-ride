@@ -17,8 +17,8 @@ import "@/App.css";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  // Set viewport meta tag for mobile devices
+// Create a separate component for ViewportSetup
+const ViewportSetup = () => {
   useEffect(() => {
     // Add viewport meta tag for mobile devices
     const viewportMeta = document.createElement('meta');
@@ -38,10 +38,15 @@ const App = () => {
     };
   }, []);
 
+  return null;
+};
+
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <BrowserRouter>
+          <ViewportSetup />
           <Toaster />
           <Sonner />
           <Routes>
