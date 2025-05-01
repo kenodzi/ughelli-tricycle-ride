@@ -1,86 +1,70 @@
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { getSafeAreaInsets, isMobileDevice } from '@/utils/platform';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Menu } from 'lucide-react';
 
 const Header = () => {
-  const location = useLocation();
-  const isHome = location.pathname === '/';
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [safeAreaTop, setSafeAreaTop] = useState('0px');
-  const isMobile = isMobileDevice();
-
-  useEffect(() => {
-    const insets = getSafeAreaInsets();
-    setSafeAreaTop(insets.top);
-  }, []);
-
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 ${isHome ? 'bg-transparent text-white' : 'bg-white text-keke-dark shadow-sm'}`}
-      style={{ paddingTop: safeAreaTop }}
-    >
-      <div className="container mx-auto px-4">
-        <div className="h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center">
-            <span className="font-bold text-2xl tracking-tight">Keke<span className="text-keke-secondary">Ride</span></span>
+    <header className="bg-white border-b sticky top-0 z-50">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <Link to="/" className="text-xl font-bold">
+          KeKeRide
+        </Link>
+        
+        <nav className="hidden md:flex items-center space-x-6">
+          <Link to="/" className="hover:text-gray-600">
+            Home
           </Link>
-          
-          <div className="hidden md:flex items-center space-x-6">
-            <Link to="/rides" className="font-medium hover:text-keke-primary transition-colors">My Rides</Link>
-            <Link to="/about" className="font-medium hover:text-keke-primary transition-colors">About</Link>
-            <Link to="/login">
-              <Button variant="outline" className="font-medium">Login</Button>
-            </Link>
-            <Link to="/signup">
-              <Button className="font-medium bg-keke-primary hover:bg-keke-primary/90">Sign Up</Button>
-            </Link>
-          </div>
-          
-          <Collapsible 
-            open={isMenuOpen} 
-            onOpenChange={setIsMenuOpen}
-            className="md:hidden"
-          >
-            <CollapsibleTrigger asChild>
-              <button className="text-2xl p-2">
-                {isMenuOpen ? <X /> : <Menu />}
-              </button>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="absolute top-16 left-0 right-0 bg-white shadow-md p-4 flex flex-col space-y-4 animate-accordion-down">
-              <Link 
-                to="/rides" 
-                className="font-medium hover:text-keke-primary transition-colors p-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                My Rides
+          <Link to="/about" className="hover:text-gray-600">
+            About
+          </Link>
+          <Link to="/rides" className="hover:text-gray-600">
+            My Rides
+          </Link>
+          <Link to="/login" className="hover:text-gray-600">
+            Login
+          </Link>
+          <Link to="/signup" className="bg-keke-primary text-white rounded-md px-4 py-2 hover:bg-keke-primary/90">
+            Sign Up
+          </Link>
+          <Link to="/driver" className="hover:text-gray-600">
+            Driver App
+          </Link>
+        </nav>
+
+        <Sheet>
+          <SheetTrigger className="md:hidden">
+            <Menu />
+          </SheetTrigger>
+          <SheetContent side="left" className="sm:max-w-xs">
+            <SheetHeader>
+              <SheetTitle>Menu</SheetTitle>
+              <SheetDescription>
+                Explore KeKeRide
+              </SheetDescription>
+            </SheetHeader>
+            <div className="grid gap-4 py-4">
+              <Link to="/" className="hover:text-gray-600 block py-2">
+                Home
               </Link>
-              <Link 
-                to="/about" 
-                className="font-medium hover:text-keke-primary transition-colors p-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
+              <Link to="/about" className="hover:text-gray-600 block py-2">
                 About
               </Link>
-              <Link 
-                to="/login"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Button variant="outline" className="font-medium w-full">Login</Button>
+              <Link to="/rides" className="hover:text-gray-600 block py-2">
+                My Rides
               </Link>
-              <Link 
-                to="/signup"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Button className="font-medium bg-keke-primary hover:bg-keke-primary/90 w-full">Sign Up</Button>
+              <Link to="/login" className="hover:text-gray-600 block py-2">
+                Login
               </Link>
-            </CollapsibleContent>
-          </Collapsible>
-        </div>
+              <Link to="/signup" className="bg-keke-primary text-white rounded-md px-4 py-2 hover:bg-keke-primary/90 block">
+                Sign Up
+              </Link>
+              <Link to="/driver" className="hover:text-gray-600 block py-2">
+                Driver App
+              </Link>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );

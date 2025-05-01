@@ -13,6 +13,10 @@ import Signup from "./pages/Signup";
 import MyRides from "./pages/MyRides";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import DriverHome from "./pages/Driver/DriverHome";
+import DriverLogin from "./pages/Driver/DriverLogin";
+import DriverSignup from "./pages/Driver/DriverSignup";
+import DriverRides from "./pages/Driver/DriverRides";
 import "@/App.css";
 
 const queryClient = new QueryClient();
@@ -50,6 +54,7 @@ const App = () => {
           <Toaster />
           <Sonner />
           <Routes>
+            {/* Passenger Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/book" element={<BookRide />} />
             <Route path="/ride-status" element={<RideStatus />} />
@@ -57,6 +62,14 @@ const App = () => {
             <Route path="/signup" element={<Signup />} />
             <Route path="/rides" element={<MyRides />} />
             <Route path="/about" element={<About />} />
+            
+            {/* Driver Routes */}
+            <Route path="/driver" element={<DriverHome />} />
+            <Route path="/driver/login" element={<DriverLogin />} />
+            <Route path="/driver/signup" element={<DriverSignup />} />
+            <Route path="/driver/rides" element={<DriverRides />} />
+            
+            {/* Catch All */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
