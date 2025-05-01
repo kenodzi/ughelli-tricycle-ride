@@ -1,0 +1,8 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" fill="#008604" />
+  <text x="512" y="512" font-family="Arial, sans-serif" font-size="180" font-weight="bold" text-anchor="middle" fill="#FFCB05" dy=".3em">KeKeRide</text>
+  <path d="M512 800c-100 0-200-50-250-150 100-150 400-150 500 0-50 100-150 150-250 150z" fill="#FFCB05" />
+  <circle cx="412" cy="450" r="40" fill="#000" />
+  <circle cx="612" cy="450" r="40" fill="#000" />
+</svg>

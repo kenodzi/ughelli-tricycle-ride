@@ -1,0 +1,11 @@
+
+{
+  "mainIcon": {
+    "ios": "public/keke-icon.png",
+    "android": "public/keke-icon.png"
+  },
+  "splashScreen": {
+    "ios": "public/keke-splash.png",
+    "android": "public/keke-splash.png"
+  }
+}
