@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, Polyline } from '@react-google-maps/api';
 import { Button } from '@/components/ui/button';
@@ -67,7 +66,8 @@ const Map: React.FC<MapProps> = ({
   useEffect(() => {
     if (showDrivers) {
       // Generate 3 random nearby driver positions
-      const randomDrivers = [
+      // Explicitly type the driver positions as [number, number][]
+      const randomDrivers: [number, number][] = [
         [center.lng + 0.01, center.lat - 0.005],
         [center.lng - 0.008, center.lat + 0.003],
         [center.lng - 0.002, center.lat - 0.01],
@@ -98,7 +98,8 @@ const Map: React.FC<MapProps> = ({
         bounds.extend({ lat: driverLocation[1], lng: driverLocation[0] });
       }
       
-      mapRef.current.fitBounds(bounds, { padding: 100 });
+      // Fixed: Use proper padding format for fitBounds
+      mapRef.current.fitBounds(bounds, { top: 100, right: 100, bottom: 100, left: 100 });
     }
   }, [isLoaded, pickupLocation, dropoffLocation, driverLocation]);
 
