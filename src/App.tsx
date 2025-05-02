@@ -9,14 +9,15 @@ import Home from "./pages/Home";
 import BookRide from "./pages/BookRide";
 import RideStatus from "./pages/RideStatus";
 import Login from "./pages/Login";
+import OtpLogin from "./pages/OtpLogin";
 import Signup from "./pages/Signup";
 import MyRides from "./pages/MyRides";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import DriverHome from "./pages/Driver/DriverHome";
 import DriverLogin from "./pages/Driver/DriverLogin";
+import DriverOtpLogin from "./pages/Driver/DriverOtpLogin";
 import DriverSignup from "./pages/Driver/DriverSignup";
-import DriverRides from "./pages/Driver/DriverRides";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import SuperAdminLogin from "./pages/SuperAdmin/SuperAdminLogin";
@@ -63,6 +64,7 @@ const App = () => {
             <Route path="/book" element={<BookRide />} />
             <Route path="/ride-status" element={<RideStatus />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/otp-login" element={<OtpLogin />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/rides" element={<MyRides />} />
             <Route path="/about" element={<About />} />
@@ -70,6 +72,7 @@ const App = () => {
             {/* Driver Routes */}
             <Route path="/driver" element={<DriverHome />} />
             <Route path="/driver/login" element={<DriverLogin />} />
+            <Route path="/driver/otp-login" element={<DriverOtpLogin />} />
             <Route path="/driver/signup" element={<DriverSignup />} />
             <Route path="/driver/rides" element={<DriverRides />} />
             

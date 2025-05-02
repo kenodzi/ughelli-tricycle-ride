@@ -81,6 +81,21 @@ const DriverLogin = () => {
                   {isSubmitting ? 'Logging in...' : 'Log In'}
                 </Button>
                 
+                <div className="relative mt-6 pt-6 border-t border-gray-200 w-full text-center">
+                  <span className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2 text-sm text-gray-500">
+                    Or
+                  </span>
+                  <Link to="/driver/otp-login" className="block w-full mt-2">
+                    <Button 
+                      type="button" 
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Login with OTP
+                    </Button>
+                  </Link>
+                </div>
+                
                 <p className="text-center text-gray-600 mt-4">
                   Don't have a driver account?{' '}
                   <Link to="/driver/signup" className="text-keke-primary hover:underline">
