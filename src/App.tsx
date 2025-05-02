@@ -17,6 +17,10 @@ import DriverHome from "./pages/Driver/DriverHome";
 import DriverLogin from "./pages/Driver/DriverLogin";
 import DriverSignup from "./pages/Driver/DriverSignup";
 import DriverRides from "./pages/Driver/DriverRides";
+import AdminLogin from "./pages/Admin/AdminLogin";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import SuperAdminLogin from "./pages/SuperAdmin/SuperAdminLogin";
+import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import "@/App.css";
 
 const queryClient = new QueryClient();
@@ -68,6 +72,14 @@ const App = () => {
             <Route path="/driver/login" element={<DriverLogin />} />
             <Route path="/driver/signup" element={<DriverSignup />} />
             <Route path="/driver/rides" element={<DriverRides />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            
+            {/* Super Admin Routes */}
+            <Route path="/superadmin/login" element={<SuperAdminLogin />} />
+            <Route path="/superadmin/dashboard" element={<SuperAdminDashboard />} />
             
             {/* Catch All */}
             <Route path="*" element={<NotFound />} />

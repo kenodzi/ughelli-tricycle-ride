@@ -1,7 +1,17 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Menu } from 'lucide-react';
+import { Menu, Shield } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 const Header = () => {
   return (
@@ -30,6 +40,24 @@ const Header = () => {
           <Link to="/driver" className="hover:text-gray-600">
             Driver App
           </Link>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Shield className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Management Access</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link to="/admin/login" className="w-full">Admin Login</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/superadmin/login" className="w-full">Super Admin</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
         <Sheet>
@@ -61,6 +89,12 @@ const Header = () => {
               </Link>
               <Link to="/driver" className="hover:text-gray-600 block py-2">
                 Driver App
+              </Link>
+              <Link to="/admin/login" className="hover:text-gray-600 block py-2">
+                Admin Login
+              </Link>
+              <Link to="/superadmin/login" className="hover:text-gray-600 block py-2">
+                Super Admin
               </Link>
             </div>
           </SheetContent>
