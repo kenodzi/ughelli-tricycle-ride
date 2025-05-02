@@ -10,6 +10,7 @@ type MapProps = {
   showDrivers?: boolean;
   onLocationSelect?: (coords: [number, number]) => void;
   driverLocation?: [number, number];
+  useRealTimeTracking?: boolean;
 };
 
 const Map: React.FC<MapProps> = ({ 
@@ -17,12 +18,14 @@ const Map: React.FC<MapProps> = ({
   dropoffLocation, 
   showDrivers = false,
   onLocationSelect,
-  driverLocation
+  driverLocation,
+  useRealTimeTracking = false
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [mapApiKey, setMapApiKey] = useState<string>('');
   const [markers, setMarkers] = useState<{ pickup?: mapboxgl.Marker, dropoff?: mapboxgl.Marker, driver?: mapboxgl.Marker }>({});
+  const [routeLine, setRouteLine] = useState<mapboxgl.GeoJSONSource | null>(null);
   
   // Initialize map when API key is available
   useEffect(() => {
@@ -56,6 +59,43 @@ const Map: React.FC<MapProps> = ({
           onLocationSelect([e.lngLat.lng, e.lngLat.lat]);
         });
       }
+      
+      // Add route line source and layer for real-time tracking
+      map.current.on('load', () => {
+        if (!map.current) return;
+        
+        // Add the route line source
+        map.current.addSource('route', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: []
+            }
+          }
+        });
+        
+        // Add the route line layer
+        map.current.addLayer({
+          id: 'route',
+          type: 'line',
+          source: 'route',
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          paint: {
+            'line-color': '#3887be',
+            'line-width': 5,
+            'line-opacity': 0.75
+          }
+        });
+        
+        // Get the source for future updates
+        setRouteLine(map.current.getSource('route') as mapboxgl.GeoJSONSource);
+      });
 
       // Clean up on unmount
       return () => {
@@ -118,7 +158,25 @@ const Map: React.FC<MapProps> = ({
         .extend(pickupLocation)
         .extend(dropoffLocation);
       
+      // If we have a driver location, include that in the bounds too
+      if (driverLocation) {
+        bounds.extend(driverLocation);
+      }
+      
       map.current.fitBounds(bounds, { padding: 100 });
+    }
+    
+    // Update route line if we have both pickup and dropoff
+    if (pickupLocation && dropoffLocation && routeLine && useRealTimeTracking) {
+      // Simple straight line for now - in a real app, you would use Mapbox Directions API
+      routeLine.setData({
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: [pickupLocation, dropoffLocation]
+        }
+      });
     }
   }, [pickupLocation, dropoffLocation]);
 
@@ -131,7 +189,8 @@ const Map: React.FC<MapProps> = ({
     } else {
       const driverEl = document.createElement('div');
       driverEl.className = 'driver-marker';
-      driverEl.innerHTML = '<div class="w-5 h-5 bg-green-500 rounded-full border-2 border-white shadow-lg flex items-center justify-center">' +
+      driverEl.innerHTML = '<div class="w-5 h-5 bg-green-500 rounded-full border-2 border-white shadow-lg flex items-center justify-center relative">' +
+        '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-20"></span>' +
         '<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">' +
         '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></div>';
       
@@ -141,7 +200,32 @@ const Map: React.FC<MapProps> = ({
       
       setMarkers(prev => ({ ...prev, driver: newMarker }));
     }
-  }, [driverLocation]);
+    
+    // Update route when driver moves (for real-time tracking)
+    if (routeLine && pickupLocation && dropoffLocation && useRealTimeTracking) {
+      routeLine.setData({
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: [
+            driverLocation,
+            ...(driverLocation[0] !== pickupLocation[0] ? [pickupLocation] : []),
+            dropoffLocation
+          ]
+        }
+      });
+    }
+    
+    // Focus map on driver location for real-time tracking
+    if (useRealTimeTracking) {
+      map.current.easeTo({
+        center: driverLocation,
+        zoom: 15,
+        duration: 1000
+      });
+    }
+  }, [driverLocation, useRealTimeTracking]);
 
   // Show nearby drivers
   useEffect(() => {

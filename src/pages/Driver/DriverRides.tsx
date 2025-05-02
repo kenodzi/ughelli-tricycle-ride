@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,7 +8,7 @@ import { useToast } from '@/components/ui/use-toast';
 
 const DriverRides = () => {
   const [status, setStatus] = useState('heading_to_pickup');
-  const [driverLocation, setDriverLocation] = useState<[number, number]>([5.5057, 5.9631]);
+  const [driverLocation, setDriverLocation] = useState<[number, number]>([5.7485, 5.7931]); // Warri coordinates
   const [timer, setTimer] = useState(0);
   const { toast } = useToast();
 
@@ -34,16 +33,50 @@ const DriverRides = () => {
     }
   }, [status, toast]);
 
-  // Simulate driver movement
+  // Simulate more realistic driver movement along a route
   useEffect(() => {
+    // Create a route path to follow (simplified for demonstration)
+    const routePath = status === 'heading_to_pickup' ? 
+      [
+        [5.7485, 5.7931], // Starting point
+        [5.7500, 5.7950],
+        [5.7520, 5.7970],
+        [5.7540, 5.7990],
+        [5.7560, 5.8010],
+        [5.7580, 5.8030], // Pickup location
+      ] :
+      [
+        [5.7580, 5.8030], // Pickup location
+        [5.7600, 5.8050],
+        [5.7620, 5.8070],
+        [5.7640, 5.8090],
+        [5.7660, 5.8110],
+        [5.7680, 5.8130], // Dropoff location
+      ];
+    
+    let currentPointIndex = 0;
+    
+    // Move along the route at regular intervals
     const interval = setInterval(() => {
-      setDriverLocation(prev => [
-        prev[0] + (Math.random() * 0.001 - 0.0005),
-        prev[1] + (Math.random() * 0.001 - 0.0005),
-      ]);
-    }, 2000);
+      if (currentPointIndex < routePath.length - 1) {
+        currentPointIndex++;
+        setDriverLocation(routePath[currentPointIndex] as [number, number]);
+      } else {
+        // If we've reached the end of the route
+        if (status === 'heading_to_pickup') {
+          // Automatically transition to arrived state
+          setStatus('arrived_at_pickup');
+          toast({
+            title: "Arrived at Pickup",
+            description: "You have arrived at the pickup location.",
+          });
+        }
+        clearInterval(interval);
+      }
+    }, 3000);
+    
     return () => clearInterval(interval);
-  }, []);
+  }, [status, toast]);
 
   // Format timer as minutes:seconds
   const formatTime = (seconds: number) => {
@@ -101,9 +134,10 @@ const DriverRides = () => {
               <Card className="overflow-hidden">
                 <div className="h-[400px]">
                   <Map 
-                    pickupLocation={[5.5057, 5.9631]} 
-                    dropoffLocation={[5.5157, 5.9731]}
+                    pickupLocation={[5.7580, 5.8030]} 
+                    dropoffLocation={[5.7680, 5.8130]}
                     driverLocation={driverLocation}
+                    useRealTimeTracking={true}
                   />
                 </div>
               </Card>

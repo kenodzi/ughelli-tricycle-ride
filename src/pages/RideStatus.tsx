@@ -208,7 +208,7 @@ const RideStatus = () => {
                             <div className="h-4 w-4 rounded-full bg-keke-primary mx-auto"></div>
                           </div>
                           <div className="flex-grow ml-2 p-3 bg-gray-50 rounded-md">
-                            <p className="font-medium">12 Market Road, Ughelli</p>
+                            <p className="font-medium">12 Market Road, Warri</p>
                           </div>
                         </div>
                         
@@ -218,7 +218,7 @@ const RideStatus = () => {
                             <div className="h-4 w-4 rounded-full bg-gray-400 mt-1"></div>
                           </div>
                           <div className="flex-grow ml-2 p-3 bg-gray-50 rounded-md">
-                            <p className="font-medium">24 Orogun Road, Ughelli</p>
+                            <p className="font-medium">24 Orogun Road, Warri</p>
                           </div>
                         </div>
                       </div>
@@ -261,10 +261,10 @@ const RideStatus = () => {
                       <div className="bg-gray-50 p-4 rounded-md">
                         <div className="grid grid-cols-3 gap-2">
                           <div className="text-gray-500 text-sm">Pickup:</div>
-                          <div className="col-span-2 font-medium">12 Market Road, Ughelli</div>
+                          <div className="col-span-2 font-medium">12 Market Road, Warri</div>
                           
                           <div className="text-gray-500 text-sm">Dropoff:</div>
-                          <div className="col-span-2 font-medium">24 Orogun Road, Ughelli</div>
+                          <div className="col-span-2 font-medium">24 Orogun Road, Warri</div>
                           
                           <div className="text-gray-500 text-sm">Ride Type:</div>
                           <div className="col-span-2 font-medium">Standard</div>

@@ -47,8 +47,9 @@ const BookRide = () => {
   const handleNextStep = () => {
     if (activeTab === 'location' && pickupLocation && dropoffLocation) {
       // In a real app, we would geocode the locations here
-      setPickupCoords([5.5057, 5.9631]); // Example coordinates for Ughelli
-      setDropoffCoords([5.5157, 5.9731]);
+      // These are example coordinates in Warri
+      setPickupCoords([5.7485, 5.7931]); // Example coordinates for Warri
+      setDropoffCoords([5.7685, 5.8031]);
       setActiveTab('select');
     } else if (activeTab === 'select') {
       setActiveTab('confirm');
@@ -69,6 +70,19 @@ const BookRide = () => {
     
     // Navigate to ride tracking page
     window.location.href = '/ride-status';
+  };
+  
+  const handleLocationSelect = (coords: [number, number]) => {
+    // If we don't have pickup location yet, set it
+    if (!pickupCoords) {
+      setPickupCoords(coords);
+      setPickupLocation(`Selected Location (${coords[0].toFixed(4)}, ${coords[1].toFixed(4)})`);
+    } 
+    // If we have pickup but no dropoff, set dropoff
+    else if (!dropoffCoords) {
+      setDropoffCoords(coords);
+      setDropoffLocation(`Selected Location (${coords[0].toFixed(4)}, ${coords[1].toFixed(4)})`);
+    }
   };
 
   return (
@@ -106,7 +120,7 @@ const BookRide = () => {
                           <label htmlFor="pickup" className="block text-sm font-medium mb-1">Pickup Location</label>
                           <Input 
                             id="pickup"
-                            placeholder="Enter pickup address" 
+                            placeholder="Enter pickup address in Warri" 
                             value={pickupLocation}
                             onChange={(e) => setPickupLocation(e.target.value)}
                             className="keke-input"
@@ -117,7 +131,7 @@ const BookRide = () => {
                           <label htmlFor="dropoff" className="block text-sm font-medium mb-1">Destination</label>
                           <Input 
                             id="dropoff"
-                            placeholder="Enter destination address" 
+                            placeholder="Enter destination address in Warri" 
                             value={dropoffLocation}
                             onChange={(e) => setDropoffLocation(e.target.value)}
                             className="keke-input"
@@ -229,6 +243,7 @@ const BookRide = () => {
                     pickupLocation={pickupCoords} 
                     dropoffLocation={dropoffCoords} 
                     showDrivers={true}
+                    onLocationSelect={handleLocationSelect}
                   />
                 </CardContent>
               </Card>
