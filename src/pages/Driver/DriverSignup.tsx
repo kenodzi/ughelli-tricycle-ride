@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
+import DriverPhotoUpload from '@/components/Driver/DriverPhotoUpload';
+import { useToast } from '@/components/ui/use-toast';
 
 const DriverSignup = () => {
   const [firstName, setFirstName] = useState('');
@@ -18,11 +20,26 @@ const DriverSignup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState(1);
+  const [driverPhoto, setDriverPhoto] = useState<File | null>(null);
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | undefined>(undefined);
+  const { toast } = useToast();
+
+  const handlePhotoChange = (file: File) => {
+    setDriverPhoto(file);
+    setPhotoPreviewUrl(URL.createObjectURL(file));
+    
+    toast({
+      title: "Photo uploaded",
+      description: "Your photo has been uploaded successfully and will be verified.",
+    });
+  };
 
   const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
     if (step === 1) {
       setStep(2);
+    } else if (step === 2) {
+      setStep(3);
     } else {
       handleSubmit(e);
     }
@@ -33,7 +50,21 @@ const DriverSignup = () => {
     setIsSubmitting(true);
     
     if (password !== confirmPassword) {
-      alert("Passwords don't match");
+      toast({
+        title: "Passwords don't match",
+        description: "Please make sure your passwords match.",
+        variant: "destructive"
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!driverPhoto) {
+      toast({
+        title: "Photo required",
+        description: "Please upload your photo for verification.",
+        variant: "destructive"
+      });
       setIsSubmitting(false);
       return;
     }
@@ -47,7 +78,8 @@ const DriverSignup = () => {
         email,
         plateNumber,
         keKeModel,
-        password
+        password,
+        driverPhoto: driverPhoto?.name
       });
       // In a real app, we would register with a backend
       window.location.href = '/driver';
@@ -70,7 +102,9 @@ const DriverSignup = () => {
             <form onSubmit={handleNextStep}>
               <CardHeader>
                 <CardTitle className="text-xl font-semibold">
-                  {step === 1 ? 'Personal Information' : 'Vehicle & Account Information'}
+                  {step === 1 ? 'Personal Information' : 
+                   step === 2 ? 'Vehicle & Account Information' : 
+                   'Identity Verification'}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -127,7 +161,7 @@ const DriverSignup = () => {
                       />
                     </div>
                   </>
-                ) : (
+                ) : step === 2 ? (
                   <>
                     <div>
                       <label htmlFor="plateNumber" className="block text-sm font-medium mb-1">Keke Plate Number</label>
@@ -178,13 +212,12 @@ const DriverSignup = () => {
                         className="keke-input"
                       />
                     </div>
-                    
-                    <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-md">
-                      <p className="text-sm text-yellow-800">
-                        Note: You'll need to upload photos of your driver's license and keke registration during the verification process.
-                      </p>
-                    </div>
                   </>
+                ) : (
+                  <DriverPhotoUpload 
+                    onPhotoChange={handlePhotoChange}
+                    photoUrl={photoPreviewUrl}
+                  />
                 )}
               </CardContent>
               <CardFooter className="flex flex-col">
@@ -195,15 +228,17 @@ const DriverSignup = () => {
                 >
                   {step === 1 
                     ? 'Continue' 
+                    : step === 2
+                    ? 'Continue'
                     : isSubmitting ? 'Creating Account...' : 'Sign Up'}
                 </Button>
                 
-                {step === 2 && (
+                {step > 1 && (
                   <Button 
                     type="button"
                     variant="ghost"
                     className="mt-2"
-                    onClick={() => setStep(1)}
+                    onClick={() => setStep(step - 1)}
                   >
                     Back
                   </Button>

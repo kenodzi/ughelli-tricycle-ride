@@ -1,10 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Map from '@/components/Map';
 import Header from '@/components/Header';
-import { Clock, Star, Phone, MessageSquare } from 'lucide-react';
+import { Clock, Star, Phone, MessageSquare, CheckCircle } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const RideStatus = () => {
   const [status, setStatus] = useState('matching');
@@ -288,7 +290,13 @@ const RideStatus = () => {
                   <h3 className="font-medium mb-4">Driver Information</h3>
                   
                   <div className="flex items-center mb-4">
-                    <div className="h-16 w-16 bg-gray-200 rounded-full mr-3"></div>
+                    <Avatar className="h-16 w-16 mr-3">
+                      <AvatarImage 
+                        src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=150&h=150&fit=crop&crop=faces" 
+                        alt="Koffi Adebayo" 
+                      />
+                      <AvatarFallback>KA</AvatarFallback>
+                    </Avatar>
                     <div>
                       <h4 className="font-semibold text-lg">Koffi Adebayo</h4>
                       <div className="flex items-center">
@@ -298,6 +306,10 @@ const RideStatus = () => {
                           </span>
                         ))}
                         <span className="text-xs text-gray-500 ml-1">4.8</span>
+                      </div>
+                      <div className="flex items-center text-xs mt-1 text-green-600">
+                        <CheckCircle className="h-3 w-3 mr-1" />
+                        Verified Driver
                       </div>
                     </div>
                   </div>
