@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -44,7 +45,7 @@ const DriverRides = () => {
         [5.7540, 5.7990],
         [5.7560, 5.8010],
         [5.7580, 5.8030], // Pickup location
-      ] :
+      ] as [number, number][] :
       [
         [5.7580, 5.8030], // Pickup location
         [5.7600, 5.8050],
@@ -52,7 +53,7 @@ const DriverRides = () => {
         [5.7640, 5.8090],
         [5.7660, 5.8110],
         [5.7680, 5.8130], // Dropoff location
-      ];
+      ] as [number, number][];
     
     let currentPointIndex = 0;
     
@@ -60,7 +61,7 @@ const DriverRides = () => {
     const interval = setInterval(() => {
       if (currentPointIndex < routePath.length - 1) {
         currentPointIndex++;
-        setDriverLocation(routePath[currentPointIndex] as [number, number]);
+        setDriverLocation(routePath[currentPointIndex]);
       } else {
         // If we've reached the end of the route
         if (status === 'heading_to_pickup') {

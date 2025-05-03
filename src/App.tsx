@@ -18,6 +18,7 @@ import DriverHome from "./pages/Driver/DriverHome";
 import DriverLogin from "./pages/Driver/DriverLogin";
 import DriverOtpLogin from "./pages/Driver/DriverOtpLogin";
 import DriverSignup from "./pages/Driver/DriverSignup";
+import DriverRides from "./pages/Driver/DriverRides";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import SuperAdminLogin from "./pages/SuperAdmin/SuperAdminLogin";
