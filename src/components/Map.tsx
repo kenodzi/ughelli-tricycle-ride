@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 const LIBRARIES: ["places"] = ["places"];
 
 // Default API key - can be overridden if empty
-const DEFAULT_GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '';
+// Using import.meta.env instead of process.env for Vite projects
+const DEFAULT_GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
 type MapProps = {
   pickupLocation?: [number, number];
