@@ -20,10 +20,11 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Define default environment variables
+  // Define environment variables
   define: {
     // This provides the equivalent of process.env as import.meta.env
-    // This doesn't expose any actual env variables, it just prevents the runtime error
-    'process.env': {}
+    'process.env': {},
+    // Add the Google Maps API key directly
+    'import.meta.env.VITE_GOOGLE_MAPS_API_KEY': JSON.stringify("AIzaSyB-AC0xuTbcdzH_L3Lvdqh0eO5peyUVpAM")
   }
 }));

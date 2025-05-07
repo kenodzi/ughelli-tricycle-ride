@@ -4,11 +4,9 @@ import { GoogleMap, useJsApiLoader, Marker, Polyline } from '@react-google-maps/
 import { Button } from '@/components/ui/button';
 
 // Define a constant for libraries to prevent re-creation on each render
-// This addresses the performance warning about libraries being passed as a new array
 const LIBRARIES: ["places"] = ["places"];
 
-// Default API key - can be overridden if empty
-// Using import.meta.env instead of process.env for Vite projects
+// Use the API key from environment variables
 const DEFAULT_GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
 type MapProps = {
@@ -47,18 +45,14 @@ const Map: React.FC<MapProps> = ({
   driverLocation,
   useRealTimeTracking = false,
 }) => {
-  const [apiKey, setApiKey] = useState<string>(() => {
-    // Try to get from localStorage first
-    const savedKey = localStorage.getItem('googleMapsApiKey');
-    return savedKey || DEFAULT_GOOGLE_MAPS_API_KEY;
-  });
+  // Always use the API key from environment variables
   const [center, setCenter] = useState(DEFAULT_CENTER);
   const mapRef = useRef<google.maps.Map | null>(null);
   const [nearbyDrivers, setNearbyDrivers] = useState<Array<[number, number]>>([]);
   
-  // Load the Google Maps JS API with the stored API key
+  // Load the Google Maps JS API with the API key from environment
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: apiKey,
+    googleMapsApiKey: DEFAULT_GOOGLE_MAPS_API_KEY,
     libraries: LIBRARIES
   });
 
@@ -75,18 +69,10 @@ const Map: React.FC<MapProps> = ({
     }
   }, [onLocationSelect]);
 
-  // Save API key to localStorage when it changes
-  useEffect(() => {
-    if (apiKey) {
-      localStorage.setItem('googleMapsApiKey', apiKey);
-    }
-  }, [apiKey]);
-
   // Simulate nearby drivers when showDrivers is true
   useEffect(() => {
     if (showDrivers) {
       // Generate 3 random nearby driver positions
-      // Explicitly type the driver positions as [number, number][]
       const randomDrivers: [number, number][] = [
         [center.lng + 0.01, center.lat - 0.005],
         [center.lng - 0.008, center.lat + 0.003],
@@ -118,7 +104,6 @@ const Map: React.FC<MapProps> = ({
         bounds.extend({ lat: driverLocation[1], lng: driverLocation[0] });
       }
       
-      // Fixed: Use proper padding format for fitBounds
       mapRef.current.fitBounds(bounds, { top: 100, right: 100, bottom: 100, left: 100 });
     }
   }, [isLoaded, pickupLocation, dropoffLocation, driverLocation]);
@@ -152,19 +137,6 @@ const Map: React.FC<MapProps> = ({
     return path;
   };
 
-  // Handle API key submission
-  const handleApiKeySubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const newApiKey = formData.get('apiKey') as string;
-    
-    if (newApiKey) {
-      setApiKey(newApiKey);
-      // Force page reload to re-initialize the Maps API with the new key
-      window.location.reload();
-    }
-  };
-
   // If the API isn't loaded yet or there was an error loading it
   if (loadError) {
     return <div className="p-4">Error loading maps: {loadError.message}</div>;
@@ -174,35 +146,6 @@ const Map: React.FC<MapProps> = ({
     return (
       <div className="flex items-center justify-center h-full">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-keke-primary"></div>
-      </div>
-    );
-  }
-
-  // If API key is not provided, show input form
-  if (!apiKey) {
-    return (
-      <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center p-4">
-        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-          <h3 className="text-lg font-medium mb-2">API Key Required</h3>
-          <p className="text-gray-600 mb-4">
-            To use the map functionality, please input your Google Maps API key below:
-          </p>
-          <form onSubmit={handleApiKeySubmit}>
-            <input
-              type="password" 
-              name="apiKey"
-              placeholder="Google Maps API Key"
-              className="keke-input mb-4 w-full p-2 border rounded"
-              required
-            />
-            <Button type="submit" className="w-full bg-keke-primary hover:bg-keke-primary/90">
-              Save API Key
-            </Button>
-          </form>
-          <p className="text-xs text-gray-500 mt-2">
-            Get your API key at <a href="https://console.cloud.google.com/" className="text-keke-primary">Google Cloud Console</a>
-          </p>
-        </div>
       </div>
     );
   }
