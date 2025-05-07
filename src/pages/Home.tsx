@@ -1,13 +1,10 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
 const Home = () => {
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Header />
       
       {/* Hero Section */}
@@ -32,7 +29,7 @@ const Home = () => {
                 </Button>
               </Link>
               <Link to="/signup">
-                <Button variant="outline" className="text-lg font-semibold h-14 px-8 text-white border-white hover:bg-white/10 w-full sm:w-auto">
+                <Button variant="outline" className="text-lg font-semibold h-14 px-8 border-white hover:bg-white/10 w-full sm:w-auto text-white">
                   Become a Rider
                 </Button>
               </Link>
@@ -157,11 +154,9 @@ const Home = () => {
                 <div>
                   <h4 className="font-semibold">Efe Johnson</h4>
                   <div className="flex">
-                    {'★★★★★'.split('').map((star, i) => (
-                      <span key={i} className="text-keke-accent text-sm">
+                    {'★★★★★'.split('').map((star, i) => <span key={i} className="text-keke-accent text-sm">
                         {star}
-                      </span>
-                    ))}
+                      </span>)}
                   </div>
                 </div>
               </div>
@@ -176,11 +171,9 @@ const Home = () => {
                 <div>
                   <h4 className="font-semibold">Blessing Okonkwo</h4>
                   <div className="flex">
-                    {'★★★★★'.split('').map((star, i) => (
-                      <span key={i} className="text-keke-accent text-sm">
+                    {'★★★★★'.split('').map((star, i) => <span key={i} className="text-keke-accent text-sm">
                         {star}
-                      </span>
-                    ))}
+                      </span>)}
                   </div>
                 </div>
               </div>
@@ -195,11 +188,9 @@ const Home = () => {
                 <div>
                   <h4 className="font-semibold">Tunde Adegoke</h4>
                   <div className="flex">
-                    {'★★★★★'.split('').map((star, i) => (
-                      <span key={i} className="text-keke-accent text-sm">
+                    {'★★★★★'.split('').map((star, i) => <span key={i} className="text-keke-accent text-sm">
                         {star}
-                      </span>
-                    ))}
+                      </span>)}
                   </div>
                 </div>
               </div>
@@ -212,8 +203,6 @@ const Home = () => {
       </section>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Home;
