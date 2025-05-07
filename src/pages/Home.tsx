@@ -29,7 +29,7 @@ const Home = () => {
                 </Button>
               </Link>
               <Link to="/signup">
-                <Button variant="outline" className="text-lg font-semibold h-14 px-8 border-white hover:bg-white/10 w-full sm:w-auto text-white">
+                <Button variant="outline" className="text-lg font-semibold h-14 px-8 border-white hover:bg-white/10 w-full sm:w-auto text-keke-dark">
                   Become a Rider
                 </Button>
               </Link>
