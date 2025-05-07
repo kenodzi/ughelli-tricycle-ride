@@ -1,6 +1,14 @@
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, Polyline } from '@react-google-maps/api';
 import { Button } from '@/components/ui/button';
+
+// Define a constant for libraries to prevent re-creation on each render
+// This addresses the performance warning about libraries being passed as a new array
+const LIBRARIES: ["places"] = ["places"];
+
+// Default API key - can be overridden if empty
+const DEFAULT_GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '';
 
 type MapProps = {
   pickupLocation?: [number, number];
@@ -38,15 +46,19 @@ const Map: React.FC<MapProps> = ({
   driverLocation,
   useRealTimeTracking = false,
 }) => {
-  const [googleMapsApiKey, setGoogleMapsApiKey] = useState<string>('');
+  const [apiKey, setApiKey] = useState<string>(() => {
+    // Try to get from localStorage first
+    const savedKey = localStorage.getItem('googleMapsApiKey');
+    return savedKey || DEFAULT_GOOGLE_MAPS_API_KEY;
+  });
   const [center, setCenter] = useState(DEFAULT_CENTER);
   const mapRef = useRef<google.maps.Map | null>(null);
   const [nearbyDrivers, setNearbyDrivers] = useState<Array<[number, number]>>([]);
-
-  // Load the Google Maps JS API
+  
+  // Load the Google Maps JS API with the stored API key
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: googleMapsApiKey,
-    libraries: ['places']
+    googleMapsApiKey: apiKey,
+    libraries: LIBRARIES
   });
 
   const onMapLoad = useCallback((map: google.maps.Map) => {
@@ -61,6 +73,13 @@ const Map: React.FC<MapProps> = ({
       onLocationSelect([lng, lat]);
     }
   }, [onLocationSelect]);
+
+  // Save API key to localStorage when it changes
+  useEffect(() => {
+    if (apiKey) {
+      localStorage.setItem('googleMapsApiKey', apiKey);
+    }
+  }, [apiKey]);
 
   // Simulate nearby drivers when showDrivers is true
   useEffect(() => {
@@ -132,9 +151,22 @@ const Map: React.FC<MapProps> = ({
     return path;
   };
 
+  // Handle API key submission
+  const handleApiKeySubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const newApiKey = formData.get('apiKey') as string;
+    
+    if (newApiKey) {
+      setApiKey(newApiKey);
+      // Force page reload to re-initialize the Maps API with the new key
+      window.location.reload();
+    }
+  };
+
   // If the API isn't loaded yet or there was an error loading it
   if (loadError) {
-    return <div className="p-4">Error loading maps</div>;
+    return <div className="p-4">Error loading maps: {loadError.message}</div>;
   }
 
   if (!isLoaded) {
@@ -146,7 +178,7 @@ const Map: React.FC<MapProps> = ({
   }
 
   // If API key is not provided, show input form
-  if (!googleMapsApiKey) {
+  if (!apiKey) {
     return (
       <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center p-4">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -154,13 +186,19 @@ const Map: React.FC<MapProps> = ({
           <p className="text-gray-600 mb-4">
             To use the map functionality, please input your Google Maps API key below:
           </p>
-          <input
-            type="password" 
-            placeholder="Google Maps API Key"
-            className="keke-input mb-4 w-full p-2 border rounded"
-            onChange={(e) => setGoogleMapsApiKey(e.target.value)}
-          />
-          <p className="text-xs text-gray-500">
+          <form onSubmit={handleApiKeySubmit}>
+            <input
+              type="password" 
+              name="apiKey"
+              placeholder="Google Maps API Key"
+              className="keke-input mb-4 w-full p-2 border rounded"
+              required
+            />
+            <Button type="submit" className="w-full bg-keke-primary hover:bg-keke-primary/90">
+              Save API Key
+            </Button>
+          </form>
+          <p className="text-xs text-gray-500 mt-2">
             Get your API key at <a href="https://console.cloud.google.com/" className="text-keke-primary">Google Cloud Console</a>
           </p>
         </div>
