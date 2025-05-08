@@ -55,7 +55,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/ughelli-tricycle-ride">
           <ViewportSetup />
           <Toaster />
           <Sonner />
